@@ -64,7 +64,6 @@ class GameGrid(Frame):
         return randint(0, GRID_LEN - 1)
 
     def init_matrix(self):
-        
         self.game.add_two() 
         self.game.add_two()
 
@@ -95,10 +94,10 @@ class GameGrid(Frame):
 
 
     def generate_next(self):
-        #generate randomly
+        #generate randomly 
         index = (self.gen(), self.gen())
         while self.game.grid[index[0]][index[1]] != 0:
             index = (self.gen(), self.gen())
-        self.game.grid[index[0]][index[1]] = 2
+        self.game.grid[index[0]][index[1]] = choice([2,4])
 
 gamegrid = GameGrid()

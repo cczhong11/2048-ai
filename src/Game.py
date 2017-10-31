@@ -9,6 +9,7 @@ class Game(object):
         self.grid = [[0]*n for _ in range(n)]
         self.length = n
         self.score = 0
+        self.init = 0
         pass
 
     def game_state(self):
@@ -40,8 +41,11 @@ class Game(object):
         while(self.grid[random_x][random_y]!=0):
             random_x=randint(0,len(self.grid)-1)
             random_y=randint(0,len(self.grid)-1)
-        self.grid[random_x][random_y]=2
-    
+        if self.init != 0:
+            self.grid[random_x][random_y] = choice([2,4])
+        else:
+            self.grid[random_x][random_y] = 2
+            self.init = 1
     def reverse(self):
         '''reverse grid for merge'''
         new=[]
@@ -99,12 +103,14 @@ class Game(object):
     def down(self):
         print("down")
         # return self.gridrix after shifting up
-        self.reverse(self.transpose())
+        self.transpose()
+        self.reverse()
         done1 = self.cover_up()
         done2 = self.merge()
         done= done1 or done2
         self.cover_up()
-        self.transpose(self.reverse())
+        self.reverse()
+        self.transpose()
         return done
 
     def left(self):
