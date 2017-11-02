@@ -5,8 +5,11 @@ from random import *
 
 class Game(object):
     
-    def __init__(self, n):
-        self.grid = [[0]*n for _ in range(n)]
+    def __init__(self, n,grid=None):
+        if grid == None:
+            self.grid = [[0]*n for _ in range(n)]
+        else:
+            self.grid = grid
         self.length = n
         self.score = 0
         self.init = 0
@@ -36,6 +39,9 @@ class Game(object):
 
     def add_two(self):
         ''' add random two in the grid in initialize'''
+        empty_num = sum([e.count(0) for e in self.grid])
+        if empty_num == 0:
+            return
         random_x =randint(0,len(self.grid)-1)
         random_y =randint(0,len(self.grid)-1)
         while(self.grid[random_x][random_y]!=0):
@@ -54,7 +60,7 @@ class Game(object):
             for j in range(self.length):
                 new[i].append(self.grid[i][self.length-j-1])
         self.grid = new
-    
+        
     def transpose(self):
         '''transport grid for merge'''
         new=[]
@@ -132,3 +138,5 @@ class Game(object):
         self.cover_up()
         self.reverse()
         return done
+
+
