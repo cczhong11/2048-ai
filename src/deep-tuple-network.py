@@ -153,7 +153,7 @@ def get_score_new(grid):
 
 def make_input(grid):
     global table
-    r = np.zeros(shape=(16, 4, 4), dtype=floatX)
+    r = np.zeros(shape=(16, 4, 4), dtype=float)
     for i in range(4):
         for j in range(4):
             v = grid[i, j]

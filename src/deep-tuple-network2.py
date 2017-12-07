@@ -10,7 +10,7 @@ from keras.optimizers import RMSprop
 from keras.layers import Conv2D, MaxPooling2D
 import numpy as np
 import random
-
+import copy
 from ExpectedMax import transpose, move_action
 
 from Game import Game
@@ -31,8 +31,8 @@ class DQN(object):
         self.lr = 0.01
         self.batch_x = []
         self.batch_y = []
-        self.build()
-        #self.model = load_model('new.h5')
+        # self.build()
+        self.model = load_model('new_c_4.h5')
 
     def build(self):
         model = Sequential()
@@ -72,7 +72,7 @@ class DQN(object):
         self.batch_x.append(np.array(g7))
         [self.batch_y.append(new) for i in range(8)]
 
-        #x = np.array([g0, g1, g2, g3, g4, g5, g6, g7]).reshape(8, 4, 4, 16)
+        # x = np.array([g0, g1, g2, g3, g4, g5, g6, g7]).reshape(8, 4, 4, 16)
         # self.model.fit(x, np.array(
         #    [new] * 8), batch_size=8, verbose=0)
 
@@ -89,7 +89,7 @@ class DQN(object):
         '''
         put 4 actions in the NN and tried to predict Q value
         '''
-        g = grid
+        g = copy.deepcopy(grid)
         best_mat = None
         best_move = -1
         best_v = None
@@ -104,14 +104,17 @@ class DQN(object):
                 v = self.model.predict(
                     np.array([input_x]), batch_size=1)[0][0]
 
-                if best_v is None or best_v < 2 * s + v:
+                if best_v is None or best_v <= 2 * s + v:
+                    if best_v == 2 * s + v:
+                        if random.uniform(0, 1) < 0.5:
+                            continue
                     best_move = m
                     best_v = s * 2 + v
                     best_mat = mat
                     input_x_best = input_x
         if best_move < 0:
             best_v = -100000
-        self.update(grid, best_v, best_mat, input_x_best)
+        # self.update(grid, best_v, best_mat, input_x_best)
 
         return best_move
 
@@ -138,7 +141,7 @@ def play_game():
         if done == 3:
             game.right()
         game.add_two()
-        print(max([max(i) for i in game.grid]))
+        # print(max([max(i) for i in game.grid]))
         # print_result(game.grid)
         # print("----\n")
 
@@ -171,6 +174,14 @@ def print_result(grid):
 
 
 dqn = DQN()
+mm = {}
 for i in range(10000):
-    print(str(i) + ":" + str(play_game()))
-    dqn.model.save('new.h5')
+    smax = play_game()
+    print(str(i) + ":" + str(smax))
+    if smax not in mm:
+        mm[smax] = 1
+    else:
+        mm[smax] += 1
+    print(mm)
+    # if smax > 511:
+    #    dqn.model.save('t.h5')
