@@ -1,7 +1,7 @@
 from tkinter import *
 from Game import *
 from random import *
-from ExpectedMax import ExpectMax
+import Expectimax
 import time
 import os
 SIZE = 500
@@ -49,7 +49,7 @@ cmd.append(cmd2)
 class GameGrid(Frame):
     def __init__(self):
         Frame.__init__(self)
-        self.E = ExpectMax()
+        self.E = Expectimax.ExpectMax()
         self.grid()
         self.master.title('2048')
         self.master.bind("<Key>", self.key_down)
@@ -111,6 +111,7 @@ class GameGrid(Frame):
             if done:
                 self.game.add_two()
                 self.update_grid_cells()
+                print("here")
                 done = False
                 if self.game.game_state() == 'win':
                     self.grid_cells[1][1].configure(
@@ -118,17 +119,17 @@ class GameGrid(Frame):
                     self.grid_cells[1][2].configure(
                         text="Win!", bg=BACKGROUND_COLOR_CELL_EMPTY)
                 if self.game.game_state() == 'lose':
-                    pass
-                    # self.grid_cells[1][1].configure(
-                    #    text="You", bg=BACKGROUND_COLOR_CELL_EMPTY)
-                    # self.grid_cells[1][2].configure(
-                    #    text="Lose!", bg=BACKGROUND_COLOR_CELL_EMPTY)
+                    self.grid_cells[1][1].configure(
+                        text="You", bg=BACKGROUND_COLOR_CELL_EMPTY)
+                    self.grid_cells[1][2].configure(
+                       text="Lose!", bg=BACKGROUND_COLOR_CELL_EMPTY)
 
         done = self.E.get_move(self.game)
+        
+        while done < 0:
+            done = self.E.get_move(self.game)
         print(done)
-        if done >= 0:
-            print(done)
-            os.system(cmd[done])
+        os.system(cmd[done])
 
     def generate_next(self):
         # generate randomly

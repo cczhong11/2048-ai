@@ -2,18 +2,8 @@
 import math
 from Game import Game
 import random
-import logging
 import copy
 
-logging.basicConfig(filename="lograte.txt", filemode="w", level=logging.INFO)
-EMPTY_SCORE = 10
-MONO_SCORE = 2
-MERGE_SCORE = 2
-MAX_IN_BOARD = 2
-EMPTY_l = []
-MERGE_l = []
-Mono_l = []
-MAX_in_b = []
 
 heurs_table = [0 for _ in range(65536)]
 dict_2 = {1 << i: i for i in range(17)}
@@ -65,7 +55,6 @@ class ExpectMax(object):
         if done == False or max(score) == 0:
             return -1
         else:
-            # print(max(score))
             return score.index(max(score))
 
     'use in E to get max expected score'
@@ -100,8 +89,7 @@ class ExpectMax(object):
         if num_empty == 0:
             sumexpected = self.try_move(grid, depth - 1)
         else:
-            # for i in range(self.n):
-            #    for j in range(self.n):
+           
             newgrid2 = grid
             newgrid4 = grid
             tmp = []
@@ -118,9 +106,7 @@ class ExpectMax(object):
             sumexpected = sumexpected / num_empty
         return sumexpected
 
-    # def get_score(self, grid, num_empty):
-    #    return num_empty
-    #'function to get scores '
+    
 
     def get_score2(self, grid, num_empty):
         score = 0
@@ -150,48 +136,7 @@ class ExpectMax(object):
                 (dict_2[i[1]] << 4) + dict_2[i[0]]
             sum_socre += heurs_table[row]
         return sum_socre
-        '''
-        emscore = num_empty ** EMPTY_SCORE
-        maxnum = max([max(i) for i in grid])
-        maxbscore = 0
-        for i in [0, self.n - 1]:
-            if grid[i].index(max(grid[i])) in [0, self.n - 1] and max(grid[i]) > 0:
-                maxbscore += max(grid[i])**MAX_IN_BOARD
-        mescore = 0
-        tmscore = 0
-        for i in range(self.n - 1):
-            mscore1 = 0
-            mscore2 = 0
-            countml = 0
-            countmr = 0
-            for j in range(self.n - 1):
-                if grid[i][j] == grid[i][j + 1] and grid[i][j] > 0:
-                    mescore += grid[i][j]**MERGE_SCORE
-                    if grid[i][j] == maxnum:
-                        mescore += grid[i][j]**(MERGE_SCORE)
-                if grid[i][j] == grid[i + 1][j] and grid[i][j] > 0:
-                    mescore += grid[i][j]**MERGE_SCORE
-                    if grid[i][j] == maxnum:
-                        mescore += grid[i][j]**MERGE_SCORE
-                if grid[i][j] > grid[i][j + 1]:
-                    mscore1 += (grid[i][j] - grid[i][j + 1])**MONO_SCORE
-                    countml += 1
-                if grid[i][j] < grid[i][j + 1]:
-                    mscore2 += (grid[i][j + 1] - grid[i][j])**MONO_SCORE
-                    countmr += 1
-            if countml == 4 or countml == 3:
-                tmscore += mscore1
-            if countmr == 4 or countmr == 3:
-                tmscore += mscore2
-        # score += max([max(i) for i in grid])
-        score = emscore + tmscore + mescore + maxbscore
-        EMPTY_l.append(emscore / score)
-        Mono_l.append(tmscore / score)
-        MERGE_l.append(mescore / score)
-        MAX_in_b.append(maxbscore / score)
-        # logging.info(str(emscore/score)+"\t"+str(tmscore/score)+"\t"+str(mescore/score)+"\t"+str(maxbscore/score)+"\t\n")
-        return score
-        '''
+        
 
     def print_result(self, grid):
         for i in grid:
@@ -433,12 +378,11 @@ def main():
         if done == 3:
             game.right()
         game.add_two()
-        # E.print_result(game.grid)
-        # print("----\n")
+        E.print_result(game.grid)
     return max([max(i) for i in game.grid])
 
 
-'''
+
 if __name__ == '__main__':
     m = {}
     build_table()
@@ -451,4 +395,4 @@ if __name__ == '__main__':
             m[maxscore] = 1
         print(m)
     print(m)
-'''
+
