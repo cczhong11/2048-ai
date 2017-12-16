@@ -15,19 +15,36 @@ def build_table():
     for row in range(65536):
         empty = 0
         merge = 0
-        mono = 0
+        mono_left = 0
+        mono_right = 0
+        totalsum = 0
+        mono_w = 1
+        total_sum = 0
+        sw = 5;
+        ew = 2;
+        mw = 1;
         num = [0 for _ in range(4)]
         num[0] = row >> 12 & 15
         num[1] = row >> 8 & 15
         num[2] = row >> 4 & 15
         num[3] = row & 15
         for i in range(4):
+            total_sum += 2**num[i]
             if num[i] == 0:
                 empty += 1
+                continue
             if i > 0 and num[i] == num[i - 1]:
-                merge += num[i]
-        heurs_table[row] = empty + 10 * merge
+                merge += 2**num[i]
+        
+        for i in range(1,4):
+            tmp = num[i-1]-num[i]
+            if tmp > 0:
+                mono_left += 2**tmp
+            else:
+                mono_right += 2**tmp
 
+        heurs_table[row] = total_sum*sw+ew*empty + mw*merge - mono_w*min(mono_left, mono_right)*mono_w
+        
 
 class ExpectMax(object):
     ''' choose max exp utilize value to move  '''
@@ -51,7 +68,7 @@ class ExpectMax(object):
             else:
                 score[move] = 0
             done = tdone or done
-
+        
         if done == False or max(score) == 0:
             return -1
         else:
@@ -90,8 +107,8 @@ class ExpectMax(object):
             sumexpected = self.try_move(grid, depth - 1)
         else:
            
-            newgrid2 = grid
-            newgrid4 = grid
+            newgrid2 = copy.deepcopy(grid)
+            newgrid4 = copy.deepcopy(grid)
             tmp = []
             for times in range(num_empty):
 
@@ -121,20 +138,27 @@ class ExpectMax(object):
             n += 1
         return score
 
+
     def get_score(self, grid, num_empty):
         global heurs_table
+        
         grid2 = transpose(grid)
         sum_socre = 0
+        j = 0
         for i in grid:
 
             row = (dict_2[i[3]] << 12) + (dict_2[i[2]] << 8) + \
                 (dict_2[i[1]] << 4) + dict_2[i[0]]
 
-            sum_socre += heurs_table[row]
+            sum_socre += heurs_table[row]*4*(j+1)
+            
+            j += 1
+        j = 0
         for i in grid2:
             row = (dict_2[i[3]] << 12) + (dict_2[i[2]] << 8) + \
                 (dict_2[i[1]] << 4) + dict_2[i[0]]
-            sum_socre += heurs_table[row]
+            sum_socre += heurs_table[row]*4*(j+1)
+            j += 1
         return sum_socre
         
 
@@ -317,7 +341,7 @@ def move_action(matt, move):
         score = -10000
     return (mat, done, score)
 
-
+'''for dqn'''
 def move_action2(matt, move):
     mat_copy = copy.deepcopy(matt)
 

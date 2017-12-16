@@ -11,7 +11,7 @@ import time
 import numpy as np
 import random
 import Expectimax
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 
 from Game import Game
 import h5py
@@ -31,8 +31,8 @@ class DQN(object):
         self.lr = 0.00005
         self.batch_x = []
         self.batch_y = []
-        # self.model = load_model('simpleQ4max1512568239.76.h5')
-        self.build()
+        self.model = load_model('bestnnresult/bestQmax.h5')
+        #self.build()
         self.loss = 0
 
     def build(self):
@@ -46,8 +46,6 @@ class DQN(object):
 
         model.add(Dense(self.num_output, init='lecun_uniform'))
         model.add(Activation('linear'))
-
-        # very goodrms = Adagrad(lr=self.lr)
         rms = Adagrad(lr=self.lr)
         model.compile(loss='mse', optimizer=rms)
         self.model = model
@@ -156,25 +154,26 @@ def print_result(grid):
     for i in grid:
         print(i)
 
-
-dqn = DQN()
-mm = {}
-for i in range(10000):
-    smax = play_game()
-    if smax not in mm:
-        mm[smax] = 1
-    else:
-        mm[smax] += 1
-    print(str(i) + ":" + str(smax))
-    print(str(mm))
-    plt.scatter(i, dqn.loss)
-    plt.pause(0.1)
-
-    if smax > 511:
-        dqn.model.save('simpleQmax512_' + str(i) + '_.h5')
-    if smax > 1023:
-        dqn.model.save('simplenn1024_' + str(i) + '_time.h5')
-    if smax > 1024:
-        dqn.model.save('simplenn2048_' + str(i) + '_time.h5')
-
-dqn.model.save('new.h5')
+def main():
+    dqn = DQN()
+    mm = {}
+    for i in range(10000):
+        smax = play_game()
+        if smax not in mm:
+            mm[smax] = 1
+        else:
+            mm[smax] += 1
+        print(str(i) + ":" + str(smax))
+        print(str(mm))
+        #plt.scatter(i, dqn.loss)
+        #plt.pause(0.1)
+        '''
+        if smax > 511:
+            dqn.model.save('simpleQmax512_' + str(i) + '_.h5')
+        if smax > 1023:
+            dqn.model.save('simplenn1024_' + str(i) + '_time.h5')
+        if smax > 1024:
+            dqn.model.save('simplenn2048_' + str(i) + '_time.h5')
+    
+    dqn.model.save('new.h5')
+'''
