@@ -34,7 +34,7 @@ def play_game(gamectrl):
 
         moveno += 1
         board = gamectrl.get_board()
-        move = find_best_move_d(board)
+        move = find_best_move_e(board)
 
         if move < 0:
             break

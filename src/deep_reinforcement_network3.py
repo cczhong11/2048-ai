@@ -11,7 +11,7 @@ import time
 import numpy as np
 import random
 import Expectimax
-#import matplotlib.pyplot as plt
+
 
 from Game import Game
 import h5py
@@ -31,8 +31,8 @@ class DQN(object):
         self.lr = 0.00005
         self.batch_x = []
         self.batch_y = []
-        self.model = load_model('bestnnresult/bestQmax.h5')
-        #self.build()
+
+        self.build()
         self.loss = 0
 
     def build(self):
@@ -107,7 +107,7 @@ def play_game():
     print(game.game_state())
     while game.game_state() == 'not over':
         done = dqn.make_desicion(game.grid)
-        # print(done)
+
         if done < 0:
 
             print("end of game")
@@ -121,12 +121,6 @@ def play_game():
         if done == 3:
             game.right()
         game.add_two()
-
-        # print_result(game.grid)
-        # print("----\n")
-
-    # if max([max(i) for i in game.grid]) < 33:
-    # print_result(game.grid)
 
     return max([max(i) for i in game.grid])
 
@@ -154,6 +148,7 @@ def print_result(grid):
     for i in grid:
         print(i)
 
+
 def main():
     dqn = DQN()
     mm = {}
@@ -165,15 +160,5 @@ def main():
             mm[smax] += 1
         print(str(i) + ":" + str(smax))
         print(str(mm))
-        #plt.scatter(i, dqn.loss)
-        #plt.pause(0.1)
-        '''
-        if smax > 511:
-            dqn.model.save('simpleQmax512_' + str(i) + '_.h5')
-        if smax > 1023:
-            dqn.model.save('simplenn1024_' + str(i) + '_time.h5')
-        if smax > 1024:
-            dqn.model.save('simplenn2048_' + str(i) + '_time.h5')
-    
-    dqn.model.save('new.h5')
-'''
+        plt.scatter(i, dqn.loss)
+        plt.pause(0.1)
