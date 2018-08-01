@@ -3,7 +3,7 @@ from chromectrl import ChromeDebuggerControl
 from gamectrl import Fast2048Control
 import Expectimax
 from Game import Game
-from deep_reinforcement_network3 import DQN
+from deep_reinforcement_network import DQN
 import time
 import os
 
@@ -12,9 +12,12 @@ D = DQN()
 Expectimax.build_table()
 
 
-def find_best_move_e(board):
+def find_best_move_e(board,type):
     G = Game(4, grid=board)
-    return E.get_move(G)
+    if type=="expect max":
+        return E.get_move(G)
+    else:
+        return D.make_desicion(board)
 
 
 def find_best_move_d(board):
@@ -34,7 +37,7 @@ def play_game(gamectrl):
 
         moveno += 1
         board = gamectrl.get_board()
-        move = find_best_move_e(board)
+        move = find_best_move_e(board,'DQN')
 
         if move < 0:
             break

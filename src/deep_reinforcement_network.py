@@ -119,7 +119,7 @@ class DQN(object):
         return best_move
 
 
-def play_game():
+def play_game(dqn):
     game = Game(4)
     game.add_two()
     game.add_two()
@@ -172,16 +172,3 @@ def print_result(grid):
     for i in grid:
         print(i)
 
-
-dqn = DQN()
-mm = {}
-for i in range(10000):
-    smax = play_game()
-    print(str(i) + ":" + str(smax))
-    if smax not in mm:
-        mm[smax] = 1
-    else:
-        mm[smax] += 1
-    print(mm)
-    # if smax > 511:
-    #    dqn.model.save('t.h5')

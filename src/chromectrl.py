@@ -1,5 +1,4 @@
-import urllib
-import urllib2
+import requests
 import json
 import threading
 import itertools
@@ -20,27 +19,28 @@ class ChromeDebuggerControl(object):
                                       "Please install it (pip install websocket-client) then try again.")
 
         # Obtain the list of pages
-        pages = json.loads(urllib2.urlopen(
-            'http://localhost:%d/json/list' % port).read())
+        
+        pages = requests.get(
+            'http://localhost:{0}/json/list'.format(port)).json()
         if len(pages) == 0:
             raise Exception("No pages to attach to!")
         elif len(pages) == 1:
             page = pages[0]
         else:
-            print "Select a page to attach to:"
+            print("Select a page to attach to:")
             for i, p in enumerate(pages):
-                print "%d) %s" % (i + 1, p['title'].encode('unicode_escape'))
+                print("{0}) {1}".format(i + 1, p['title'].encode('unicode_escape')))
                 if p['title'].encode('unicode_escape') == '2048':
                     page = p
-            '''
+            
             while 1:
                 try:
-                    pageidx = int(raw_input("Selection? "))
+                    pageidx = int(input("Selection? "))
                     page = pages[pageidx - 1]
                     break
-                except Exception, e:
-                    print "Invalid selection:", e
-            '''
+                except Exception:
+                    print("Invalid selection")
+            
         # Configure debugging websocket
         wsurl = page['webSocketDebuggerUrl']
         self.ws = websocket.create_connection(wsurl)
@@ -93,7 +93,7 @@ class ChromeDebuggerControl(object):
         resp = self.results.pop(id)
         if 'error' in resp:
             raise Exception("Command %s(%s) failed: %s (%d)" % (
-                method, ', '.join('%s=%r' % (k, v) for k, v in params.iteritems()), resp['error']['message'], resp['error']['code']))
+                method, ', '.join('%s=%r' % (k, v) for k, v in params.items()), resp['error']['message'], resp['error']['code']))
         return resp['result']
 
     def execute(self, cmd):

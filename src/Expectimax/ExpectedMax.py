@@ -278,9 +278,6 @@ def move_gride(matt, move):
 def get_score_s(grid):
     score = 0
     n = 0
-    Mono_l = 0
-    Mono_r = 0
-    mono = 0
     for i in range(4):
 
         if i % 2 == 0:
@@ -291,16 +288,6 @@ def get_score_s(grid):
             for j in range(4 - 1, -1, -1):
                 score += grid[i][j] * 4**n
                 n += 1
-
-        '''
-        Mono_l = 0
-        Mono_r = 0
-        for j in range(1, 4):
-            if grid[i][j] - grid[i][j - 1] > 0:
-                Mono_l += grid[i][j] - grid[i][j - 1]
-            else:
-                Mono_r += grid[i][j - 1] - grid[i][j]
-        mono += - min(Mono_l, Mono_r)'''
     return score
 
 
