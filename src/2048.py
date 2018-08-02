@@ -14,7 +14,7 @@ Expectimax.build_table()
 
 def find_best_move_e(board,type):
     G = Game(4, grid=board)
-    if type=="expect max":
+    if type=="expectimax":
         return E.get_move(G)
     else:
         return D.make_desicion(board)
@@ -24,7 +24,7 @@ def find_best_move_d(board):
     return D.make_desicion(board)
 
 
-def play_game(gamectrl):
+def play_game(gamectrl,name):
     moveno = 0
     start = time.time()
     while 1:
@@ -37,7 +37,7 @@ def play_game(gamectrl):
 
         moveno += 1
         board = gamectrl.get_board()
-        move = find_best_move_e(board,'DQN')
+        move = find_best_move_e(board,name)
 
         if move < 0:
             break
@@ -57,9 +57,11 @@ def main(argv):
     gamectrl = Fast2048Control(ctrl)
     if gamectrl.get_status() == 'ended':
         gamectrl.restart_game()
-
-    play_game(gamectrl)
-
+    strategy = input("Which type of strategy you want to test? Expectimax input 1, Deep Q learning input 2\n")
+    if strategy == "1":
+        play_game(gamectrl,"expectimax")
+    else:
+        play_game(gamectrl,"DQN")
 
 if __name__ == '__main__':
     import sys

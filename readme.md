@@ -4,20 +4,32 @@
 
 # how to use
 
-all the file should use python 2.7 to run.
+All the file should use python 3.5 to run.
 
-if you want to use chrome ctrl
+Use the following code to install all packages.
 
-- for mac user enter `/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://gabrielecirulli.github.io/2048/ --remote-debugging-port=9222 ` in terminal
-- run `python2 2048.py`
+```bash
+pip install -r requirements.txt
+```
+
+If you want to use Chrome ctrl.
+
+- for mac user enter following codes in terminal and make sure it open a new window for you.
+
+```bash
+/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome http://gabrielecirulli.github.io/2048/ --remote-debugging-port=9222
+```
+
+- run `python 2048.py`
 
 
-# Game infrusture
+# Game Infrastructure
 
 
-The game logic is used code from [2048-python](https://github.com/yangshun/2048-python).
+The game infrastructure is used code from [2048-python](https://github.com/yangshun/2048-python).
 
 The game contrl part code are used from [2048-ai](https://github.com/nneonneo/2048-ai)
+
 # ExpectiMax
 
 The class is in `src\Expectimax\ExpectedMax.py`. 
@@ -28,8 +40,13 @@ In each state, it will call `get_move` to try different actions, and afterwards,
 
 # Deep reinforcement learning
 
-The main class is in `deep-reinforcement-learning*.py`.
+The main class is in `deep-reinforcement-learning.py`.
 
 The first version in just a draft, the second one use CNN as an architecture, and this method could achieve 1024, but its result actually not very depend on the predict result. The third version I implement a strategy that move action totally reply on the output of neural network. The result is not satsified, the highest score I achieve is only 512.
 
 
+For more information, welcome to view my [report](AI for 2048 write up.pdf) 
+
+# Demo 
+
+[video](https://youtu.be/2Ydi4-JA03o)
